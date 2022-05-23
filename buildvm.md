@@ -12,12 +12,12 @@ make sure port forwarding is enabled
 
 # check nginx commands
 
-    sudo nginx -t
-    sudo nginx -s reload
+    nginx -t
+    nginx -s reload
 
-    sudo systemctl stop nginx
-    sudo systemctl start nginx
-    sudo systemctl status nginx
+    systemctl stop nginx
+    systemctl start nginx
+    systemctl status nginx
 
 # remove default conf files
 
@@ -35,18 +35,16 @@ make sure port forwarding is enabled
         listen       80;
         server_name  _;
 
-        #charset koi8-r;
-
         #access_log  logs/host.access.log  main;
 
         location / {
-            root   /usr/share/nginx/html;
-            index  index.php index.html index.htm;
+            root   /var/www/html;
+            index  index.html;
         }
 
         error_page  404              /404.html;
         location = /404.html {
-            root   /usr/share/nginx/html;
+            root   /var/www/html;
         }
 
         # redirect server error pages to the static page /50x.html
