@@ -25,45 +25,16 @@ make sure port forwarding is enabled
 
 # add default to conf.d folder
 
+    
     nano /etc/nginx/nginx.conf
     
-    
-    events {
-      worker_connections  4096;  ## Default: 1024
-    }
-    http {
-     server {
-        listen 80;
-        listen [::]:80;
-        #server_name dev3.dmtools.info;
-        server_name dev4.dmtools.info;
-    #location / {
-    #        rewrite ^ https://$host$request_uri? permanent;
-    #    }
-
-    location / {
-            root   /var/www/html;
-            index  index.html;
-        }
-
-    location ~ /.well-known/acme-challenge {
-            allow all;
-            root /tmp/acme_challenge;
-        }
-
-    }
-    }
 
  
 # make var/www/html
 
-    cd var
-    mkdir www
-    cd www
-    mkdir html
-    cd html
+   cd /usr/share/nginx/html
     
-    nano index.html
+   nano index.html
     
         <!DOCTYPE html>
         <html>
@@ -83,14 +54,34 @@ make sure port forwarding is enabled
 
 # start here
 
-    apt-get -y install openssl
-    apt-get -y install sudo
-    apt-get install -y apt-utils dialog
-    apt-get install -y build-essential python3.10 python3-pip python3-dev
-    apt-get -y install nodejs npm
+    yum install openssl
+    
+    yum install nodejs npm
+    
+    yum install yum-utils make gcc
+    yum install openssl-devel bzip2-devel libffi-devel zlib-devel 
+    yum install wget
+    
+    cd /home/andrew_gaitskell/
+    
+    wget https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tgz 
+    
+    tar xzf Python-3.10.2.tgz 
+    
+    cd Python-3.10.2
+    
+    ./configure --with-system-ffi --with-computed-gotos --enable-loadable-sqlite-extensions
+    
+    ./configure --enable-optimizations
+    
+    make -j ${nproc} 
+    make altinstall
+    
     apt-get -y install python3.10-venv
     apt-get -y install python3-mysqldb
     apt-get -y install libmysqlclient-dev
+
+    apt-get install -y build-essential python3.10 python3-pip python3-dev
 
     npm install -g configurable-http-proxy
 
