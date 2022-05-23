@@ -74,6 +74,8 @@ make sure port forwarding is enabled
     
     cd /home/andrew_gaitskell/
     
+    https://tecadmin.net/how-to-install-python-3-10-on-centos-rhel-8-fedora/
+    
     wget https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tgz 
     
     tar xzf Python-3.10.2.tgz 
