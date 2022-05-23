@@ -19,38 +19,61 @@ make sure port forwarding is enabled
     systemctl start nginx
     systemctl status nginx
 
-# remove default conf files
+# install nano
 
-    rm /etc/nginx/sites-enabled/default
-    rm /etc/nginx/sites-available/default
+    yum install nano
 
 # add default to conf.d folder
 
-    nano /etc/nginx/conf.d/default.conf
+    nano /etc/nginx/nginx.conf
     
-    #
-    # The default server
-    #
-    server {
-        listen       80;
-        server_name  _;
+    
+    events {
+      worker_connections  4096;  ## Default: 1024
+    }
+    http {
+     server {
+        listen 80;
+        listen [::]:80;
+        #server_name dev3.dmtools.info;
+        server_name dev4.dmtools.info;
+    #location / {
+    #        rewrite ^ https://$host$request_uri? permanent;
+    #    }
 
-        #access_log  logs/host.access.log  main;
-
-        location / {
+    location / {
             root   /var/www/html;
             index  index.html;
         }
 
-        error_page  404              /404.html;
-        location = /404.html {
-            root   /var/www/html;
+    location ~ /.well-known/acme-challenge {
+            allow all;
+            root /tmp/acme_challenge;
         }
 
-        # redirect server error pages to the static page /50x.html
-        #
-        }
+    }
+    }
+
+ 
+# make var/www/html
+
+    cd var
+    mkdir www
+    cd www
+    mkdir html
+    cd html
     
+    nano index.html
+    
+        <!DOCTYPE html>
+        <html>
+        <body>
+
+        <h1>My First Heading</h1>
+        <p>My first paragraph.</p>
+
+        </body>
+        </html>     
 
 # check nginx config and reload
 
