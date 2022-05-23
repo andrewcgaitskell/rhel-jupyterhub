@@ -77,18 +77,23 @@ make sure port forwarding is enabled
     make -j ${nproc} 
     make altinstall
     
-    apt-get -y install python3.10-venv
-    apt-get -y install python3-mysqldb
-    apt-get -y install libmysqlclient-dev
+    mkdir jupyterhub
+    cd jupyterhub
+    
+    /usr/local/bin/python3.10 -m venv env
+    
+    
+    xxx yum install python3-mysqldb
+    xxx yum install libmysqlclient-dev
 
-    apt-get install -y build-essential python3.10 python3-pip python3-dev
+    xxx apt-get install -y build-essential python3.10 python3-pip python3-dev
 
     npm install -g configurable-http-proxy
 
-    mkdir srv/jupyterhub
-    mkdir srv/jupyterhub/home
+    mkdir /srv/jupyterhub
+    mkdir /srv/jupyterhub/home
 
-    mkdir srv/jupyterhub/notebooks
+    mkdir /srv/jupyterhub/notebooks
 
     ARG user=jupyterhub
     ARG home=/srv/jupyterhub/home/$user
@@ -105,19 +110,13 @@ make sure port forwarding is enabled
 
 echo "jupyterhub:jupyterhub" | chpasswd
 
-usermod -aG sudo jupyterhub
+usermod -aG wheel jupyterhub
 
 groupadd jupyterhub
 
 usermod -aG jupyterhub jupyterhub
 
 chown -R jupyterhub:jupyterhub /srv/jupyterhub
-
-#ensures that /var/run/docker.sock exists
-touch /var/run/docker.sock
-
-#changes the ownership of /var/run/docker.sock
-chown jupyterhub:jupyterhub /var/run/docker.sock
 
 # Give rhea passwordless sudo access to run the sudospawner mediator on behalf of users:
 ADD sudoers /tmp/sudoers
