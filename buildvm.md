@@ -58,6 +58,88 @@ make sure port forwarding is enabled
     sudo nginx -s reload
 
 
+# start here
+
+    apt-get -y install openssl
+    apt-get -y install sudo
+    apt-get install -y apt-utils dialog
+    apt-get install -y build-essential python3.10 python3-pip python3-dev
+    apt-get -y install nodejs npm
+    apt-get -y install python3.10-venv
+    apt-get -y install python3-mysqldb
+    apt-get -y install libmysqlclient-dev
+
+    npm install -g configurable-http-proxy
+
+    mkdir srv/jupyterhub
+    mkdir srv/jupyterhub/home
+
+    mkdir srv/jupyterhub/notebooks
+
+    ARG user=jupyterhub
+    ARG home=/srv/jupyterhub/home/$user
+
+    adduser \
+    --disabled-password \
+    --gecos "" \
+    --home /srv/jupyterhub/home/jupyterhub \
+    --ingroup docker \
+    jupyterhub
+
+
+#RUN usermod -aG shadow jupyterhub
+
+echo "jupyterhub:jupyterhub" | chpasswd
+
+usermod -aG sudo jupyterhub
+
+groupadd jupyterhub
+
+usermod -aG jupyterhub jupyterhub
+
+chown -R jupyterhub:jupyterhub /srv/jupyterhub
+
+#ensures that /var/run/docker.sock exists
+touch /var/run/docker.sock
+
+#changes the ownership of /var/run/docker.sock
+chown jupyterhub:jupyterhub /var/run/docker.sock
+
+# Give rhea passwordless sudo access to run the sudospawner mediator on behalf of users:
+ADD sudoers /tmp/sudoers
+RUN cat /tmp/sudoers >> /etc/sudoers
+RUN rm /tmp/sudoers
+
+RUN chown jupyterhub .
+
+USER jupyterhub
+
+ENV VIRTUAL_ENV=/srv/jupyterhub/env
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Install dependencies:
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+RUN jupyter lab build
+
+RUN pip -q install pip --upgrade
+RUN pip install wheel
+
+WORKDIR /srv/jupyterhub
+
+#RUN touch jupyterhub_cookie_secret
+#RUN chmod g+rw jupyterhub_cookie_secret
+#RUN openssl rand -hex 32 > jupyterhub_cookie_secret
+#RUN chmod 600 jupyterhub_cookie_secret
+
+RUN jupyterhub --generate-config
+
+COPY . .
+#EXPOSE 8000
+CMD . /srv/jupyterhub/env/bin/activate && exec jupyterhub
+
 # install node
 
 # now looking at node and how to connect containers
