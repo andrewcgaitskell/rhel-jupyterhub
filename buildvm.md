@@ -62,6 +62,16 @@ make sure port forwarding is enabled
     yum install openssl-devel bzip2-devel libffi-devel zlib-devel 
     yum install wget
     
+    wget https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
+    yum localinstall mysql80-community-release-el8-1.noarch.rpm
+    yum module disable mysql
+    yum install mysql-community-server
+    yum install mysql-community-server --nogpgcheck
+    
+    yum install mysql-devel
+       
+    yum install sqlite-devel
+    
     cd /home/andrew_gaitskell/
     
     wget https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tgz 
@@ -82,6 +92,13 @@ make sure port forwarding is enabled
     
     /usr/local/bin/python3.10 -m venv env
     
+    /usr/local/bin/python3.10 -m venv env 
+    
+    /home/jupyterhub/env/bin/python3.10 -m pip install --upgrade pip
+    
+    pip install -r requirements.txt
+    
+    jupyter lab build
     
     xxx yum install python3-mysqldb
     xxx yum install libmysqlclient-dev
@@ -119,23 +136,23 @@ usermod -aG jupyterhub jupyterhub
 chown -R jupyterhub:jupyterhub /srv/jupyterhub
 
 # Give rhea passwordless sudo access to run the sudospawner mediator on behalf of users:
-ADD sudoers /tmp/sudoers
-RUN cat /tmp/sudoers >> /etc/sudoers
-RUN rm /tmp/sudoers
+#ADD sudoers /tmp/sudoers
+#RUN cat /tmp/sudoers >> /etc/sudoers
+#RUN rm /tmp/sudoers
 
-RUN chown jupyterhub .
+#RUN chown jupyterhub .
 
-USER jupyterhub
+#USER jupyterhub
 
-ENV VIRTUAL_ENV=/srv/jupyterhub/env
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+#ENV VIRTUAL_ENV=/srv/jupyterhub/env
+#RUN python3 -m venv $VIRTUAL_ENV
+#ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install dependencies:
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+#COPY requirements.txt .
+#RUN pip install -r requirements.txt
 
-RUN jupyter lab build
+#RUN jupyter lab build
 
 RUN pip -q install pip --upgrade
 RUN pip install wheel
