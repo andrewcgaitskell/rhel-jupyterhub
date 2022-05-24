@@ -4,6 +4,9 @@ make sure port forwarding is enabled
 
 # nginx
 
+    # consider
+    
+
     sudo su
     yum update
     yum install curl -y
@@ -61,6 +64,9 @@ make sure port forwarding is enabled
     yum install yum-utils make gcc
     yum install openssl-devel bzip2-devel libffi-devel zlib-devel 
     yum install wget
+    
+    # consider
+    podman run -d --name mysql_database -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db -p 3306:3306 rhel8/mysql-80
     
     wget https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
     yum localinstall mysql80-community-release-el8-1.noarch.rpm
