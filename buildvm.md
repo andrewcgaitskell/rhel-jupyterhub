@@ -75,6 +75,14 @@ make sure port forwarding is enabled
     yum install mysql-community-server --nogpgcheck
     
     yum install mysql-devel
+    
+    upload sql file to server
+    
+    make RubyDB Database
+    
+    loaf backup file
+    
+    mysql -h localhost -u root -p -D RubyDB < 20211104_dmtools_backup.sql;
        
     yum install sqlite-devel
     
