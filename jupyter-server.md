@@ -1,18 +1,3 @@
-rhel 8
-
-make sure port forwarding is enabled
-
-# nginx
-
-    # consider
-    
-
-    sudo su
-    yum update
-    yum install curl -y
-    yum install nginx -y
-  
-
 # check nginx commands
 
     nginx -t
@@ -22,18 +7,15 @@ make sure port forwarding is enabled
     systemctl start nginx
     systemctl status nginx
 
-# install nano
 
-    yum install nano
-
-# add default to conf.d folder
+# editing conf.d folder
 
     
     nano /etc/nginx/nginx.conf
     
 
  
-# make var/www/html
+# make home file in /usr/share/nginx/html
 
    cd /usr/share/nginx/html
     
@@ -43,7 +25,7 @@ make sure port forwarding is enabled
         <html>
         <body>
 
-        <h1>My First Heading</h1>
+        <h1>DM Tools Home</h1>
         <p>My first paragraph.</p>
 
         </body>
@@ -56,71 +38,20 @@ make sure port forwarding is enabled
 
 
 # start here
-
-    yum install openssl
     
     yum install nodejs npm
     
-    yum install yum-utils make gcc
-    yum install openssl-devel bzip2-devel libffi-devel zlib-devel 
-    yum install wget
-    
-    # consider
-    podman run -d --name mysql_database -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db -p 3306:3306 rhel8/mysql-80
-    
-    wget https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm
-    yum localinstall mysql80-community-release-el8-1.noarch.rpm
-    yum module disable mysql
-    yum install mysql-community-server
-    yum install mysql-community-server --nogpgcheck
-    
-    yum install mysql-devel
     
     upload sql file to server
     
     make RubyDB Database
     
-    loaf backup file
+    load backup file
     
     mysql -h localhost -u root -p -D RubyDB < 20211104_dmtools_backup.sql;
        
     yum install sqlite-devel
     
-    cd /home/andrew_gaitskell/
-    
-    https://tecadmin.net/how-to-install-python-3-10-on-centos-rhel-8-fedora/
-    
-    wget https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tgz 
-    
-    tar xzf Python-3.10.2.tgz 
-    
-    cd Python-3.10.2
-    
-    ./configure --with-system-ffi --with-computed-gotos --enable-loadable-sqlite-extensions
-    
-    ./configure --enable-optimizations
-    
-    make -j ${nproc} 
-    make altinstall
-    
-    mkdir jupyterhub
-    cd jupyterhub
-    
-    /usr/local/bin/python3.10 -m venv env
-    
-    /usr/local/bin/python3.10 -m venv env 
-    
-    /home/jupyterhub/env/bin/python3.10 -m pip install --upgrade pip
-    
-    pip install -r requirements.txt
-    
-    jupyter lab build
-    
-    xxx yum install python3-mysqldb
-    xxx yum install libmysqlclient-dev
-
-    xxx apt-get install -y build-essential python3.10 python3-pip python3-dev
-
     npm install -g configurable-http-proxy
 
     mkdir /srv/jupyterhub
@@ -137,6 +68,26 @@ make sure port forwarding is enabled
     --home /srv/jupyterhub/home/jupyterhub \
     --ingroup docker \
     jupyterhub
+    
+    cd /home/andrew_gaitskell/
+    
+    mkdir jupyterhub
+    cd jupyterhub
+    
+    /usr/local/bin/python3.10 -m venv env
+    
+    /home/jupyterhub/env/bin/python3.10 -m pip install --upgrade pip
+    
+    pip install -r requirements.txt
+    
+    jupyter lab build
+    
+    xxx yum install python3-mysqldb
+    xxx yum install libmysqlclient-dev
+
+    xxx apt-get install -y build-essential python3.10 python3-pip python3-dev
+
+   
 
 
 #RUN usermod -aG shadow jupyterhub
@@ -151,10 +102,6 @@ usermod -aG jupyterhub jupyterhub
 
 chown -R jupyterhub:jupyterhub /srv/jupyterhub
 
-# Give rhea passwordless sudo access to run the sudospawner mediator on behalf of users:
-#ADD sudoers /tmp/sudoers
-#RUN cat /tmp/sudoers >> /etc/sudoers
-#RUN rm /tmp/sudoers
 
 #RUN chown jupyterhub .
 
