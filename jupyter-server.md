@@ -41,7 +41,6 @@
     
     yum install nodejs npm
     
-    
     upload sql file to server
     
     make RubyDB Database
@@ -50,33 +49,40 @@
     
     mysql -h localhost -u root -p -D RubyDB < 20211104_dmtools_backup.sql;
        
-    yum install sqlite-devel
+    #yum install sqlite-devel
     
     npm install -g configurable-http-proxy
 
-    mkdir /srv/jupyterhub
-    mkdir /srv/jupyterhub/home
+    mkdir /dmtools
+    mkdir /dmtools/home
 
-    mkdir /srv/jupyterhub/notebooks
-
-    ARG user=jupyterhub
-    ARG home=/srv/jupyterhub/home/$user
+    mkdir /dmtools/notebooks
 
     adduser \
-    --disabled-password \
-    --gecos "" \
-    --home /srv/jupyterhub/home/jupyterhub \
-    --ingroup docker \
-    jupyterhub
-    
-    cd /home/andrew_gaitskell/
+    --home /dmtools/home \
+    pauser
+
+    echo "pauser:pauser" | chpasswd
+
+    usermod -aG wheel pauser
+
+    groupadd dmtools
+
+    usermod -aG dmtools pauser
+    chown [OPTIONS] USER[:GROUP] FILE(s)
+
+    chown -R pauser:dmtools /dmtools
+   
+    cd /dmtools
     
     mkdir jupyterhub
     cd jupyterhub
     
     /usr/local/bin/python3.10 -m venv env
     
-    /home/jupyterhub/env/bin/python3.10 -m pip install --upgrade pip
+    /dmtools/jupyterhub/env/bin/python3.10 -m pip install --upgrade pip
+    
+    source env/bin/activate
     
     pip install -r requirements.txt
     
@@ -90,20 +96,6 @@
    
 
 
-#RUN usermod -aG shadow jupyterhub
-
-echo "jupyterhub:jupyterhub" | chpasswd
-
-usermod -aG wheel jupyterhub
-
-groupadd jupyterhub
-
-usermod -aG jupyterhub jupyterhub
-
-chown -R jupyterhub:jupyterhub /srv/jupyterhub
-
-
-#RUN chown jupyterhub .
 
 #USER jupyterhub
 
@@ -151,74 +143,3 @@ apt install certbot python3-certbot-nginx
 
 https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
 
-sudo su
-
-cd /etc/nginx/conf.d
-
-nano dev1.dmtools.info.conf
-
-
-    server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /var/www/dev1.dmtools.info/html;
-    server_name dev1.dmtools.info;
-
-    #charset koi8-r;
-
-    #access_log  logs/host.access.log  main;
-
-    location / {
-        root /var/www/dev1.dmtools.info/html;
-        index  index.html;
-    }
-
-    location /hello/ {
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_pass http://127.0.0.1:8080/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        # location /overview {
-        #     proxy_pass http://127.0.0.1:3000$request_uri;
-        #     proxy_redirect off;
-        # }
-    }
-
-
-    location /dev/ {
-        proxy_pass http://localhost:5050/dev/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-
-    error_page  404              /404.html;
-    location = /404.html {
-        root   /usr/share/nginx/html;
-    }
-
-    # redirect server error pages to the static page /50x.html
-    #
-    }
-
-
-certbot --nginx -d dev1.dmtools.info
-
-
-    location = /dev/hub/oauth_callback {
-        proxy_pass http://localhost:5050/dev/hub/oauth_callback;
-
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        # WebSocket support
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-        proxy_redirect https,http https;
-
-    }
