@@ -39,7 +39,7 @@
 
 # start here
     
-    yum install nodejs npm
+    ##yum install nodejs npm
     
     upload sql file to server
     
@@ -86,7 +86,11 @@
     
     pip install -r requirements.txt
     
+    
+    
     jupyter lab build
+    
+    nano dmtools-config.py
     
     xxx yum install python3-mysqldb
     xxx yum install libmysqlclient-dev
