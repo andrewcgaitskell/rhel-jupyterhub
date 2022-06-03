@@ -1,0 +1,9 @@
+wheel
+jupyterhub
+jupyterlab
+notebook
+dockerspawner
+sudospawner
+pandas
+mysqlclient
+jupyter-dash
