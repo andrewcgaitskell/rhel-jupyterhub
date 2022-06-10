@@ -24,13 +24,19 @@ make sure port forwarding is enabled
         sudo yum module enable -y container-tools:rhel8
         sudo yum module install -y container-tools:rhel8
 
+# install dependencies
+
+        yum install wget
+        
+        yum install wget yum-utils make gcc openssl-devel bzip2-devel libffi-devel zlib-devel 
+
 # upgrade python
 
-    wget https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tgz 
+    wget https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tgz 
     
-    tar xzf Python-3.10.2.tgz 
+    tar xzf Python-3.10.4.tgz 
     
-    cd Python-3.10.2
+    cd Python-3.10.4
     
     ./configure --with-system-ffi --with-computed-gotos --enable-loadable-sqlite-extensions
     
