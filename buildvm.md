@@ -49,6 +49,18 @@ make sure port forwarding is enabled
 
     /usr/local/bin/python3.10 -m venv env
 
+# upgrade pip
+
+    /home/andrew_gaitskell/Python-3.10.4/env/bin/python3.10 -m pip install --upgrade pip
+
+# enable env
+
+        source env/bin/activate
+
+# install podman compose
+
+   pip install podman-compose
+
 # nginx
 
     # consider
