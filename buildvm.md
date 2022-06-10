@@ -21,8 +21,27 @@ make sure port forwarding is enabled
 
 # podman
 
-sudo yum module enable -y container-tools:rhel8
-sudo yum module install -y container-tools:rhel8
+        sudo yum module enable -y container-tools:rhel8
+        sudo yum module install -y container-tools:rhel8
+
+# upgrade python
+
+    wget https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tgz 
+    
+    tar xzf Python-3.10.2.tgz 
+    
+    cd Python-3.10.2
+    
+    ./configure --with-system-ffi --with-computed-gotos --enable-loadable-sqlite-extensions
+    
+    ./configure --enable-optimizations
+    
+    make -j ${nproc} 
+    make altinstall
+
+# create env
+
+    /usr/local/bin/python3.10 -m venv env
 
 # nginx
 
