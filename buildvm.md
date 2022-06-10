@@ -23,6 +23,8 @@ make sure port forwarding is enabled
 
         sudo yum module enable -y container-tools:rhel8
         sudo yum module install -y container-tools:rhel8
+        
+        yum install podman-plugins
 
 # install dependencies
         
