@@ -32,6 +32,8 @@ make sure port forwarding is enabled
 
         yum install git
         
+        yum install sqlite-devel
+        
 # upgrade python
 
     wget https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tgz 
